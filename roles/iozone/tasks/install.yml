@@ -1,0 +1,146 @@
+---
+# file: /roles/cassandra/tasks/main.yml
+
+##########################################################
+# Create required directories
+
+- name: Create temporary dir 'tmp' on remote node
+  file: >
+    path={{ tmp_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create results dir 'result' on remote node
+  file: >
+    path={{ iozone_result_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'workspace' on remote node
+  file: >
+    path={{ iozone_workspace_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'ebsvol01' on remote node
+  file: >
+    path={{ iozone_workspace_ebs_vol_01_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'ebsvol02' on remote node
+  file: >
+    path={{ iozone_workspace_ebs_vol_02_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'ebsvol04' on remote node
+  file: >
+    path={{ iozone_workspace_ebs_vol_04_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'empvol01' on remote node
+  file: >
+    path={{ iozone_workspace_emp_vol_01_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create workspace dir 'empvol02' on remote node
+  file: >
+    path={{ iozone_workspace_emp_vol_02_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+##########################################################
+# Install iozone workload generator
+
+- name: Download tar ball
+  get_url: >
+    url={{ iozone_tar_uri }}
+    dest={{ tmp_dir }}
+
+- name: Untar tar ball
+  command: tar -xvf {{ tmp_dir }}/{{ iozone_tar_name }} -C {{ tmp_dir }}
+
+- name: Change permission of untared iozone dir
+  file: >
+    path={{ tmp_dir }}/{{ iozone_untar_name }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+# Install the package "foo"
+- name: Install make via apt
+  apt: name=make state=present
+
+- name: Update APT repository
+  apt: 
+
+- name: Install iozone dependency "gcc" via apt
+  apt: name=gcc state=present
+
+- name: Install iozone dependency "libc6-dev" via apt
+  apt: name=libc6-dev state=present
+
+- name: Install iozone dependency "build-essential" via apt
+  apt: name=build-essential state=present
+
+- name: Install iozone dependency "checkinstall" via apt
+  apt: name=checkinstall state=present
+
+- name: Install iozone dependency "cvs" via apt
+  apt: name=cvs state=present
+
+# [2DO: Check for mandatory dependency!]
+- name: Install iozone dependency "subversion" via apt
+  apt: name=subversion state=present
+
+  # [2DO: Check for mandatory dependency!]
+- name: Install iozone dependency "git-core" via apt
+  apt: name=git-core state=present
+
+  # [2DO: Check for mandatory dependency!]
+- name: Install iozone dependency "mercurial" via apt
+  apt: name=mercurial state=present
+
+  # [2DO: Check for mandatory dependency!]
+- name: Install "sysstat" via apt
+  apt: name=sysstat state=present
+
+- name: Package iozone source
+  #sudo: yes
+  shell: "mv {{ tmp_dir }}/{{ cassandra_untar_name }}/* {{ cassandra_home }}/"
+
+
+##########################################################
+# Install iostat monitoring tool
+
+
+

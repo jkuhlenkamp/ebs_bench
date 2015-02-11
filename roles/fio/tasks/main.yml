@@ -1,0 +1,115 @@
+---
+# file: /roles/cassandra/tasks/main.yml
+
+##########################################################
+# Create required directories
+
+- name: Create fio workspace dir '../workspace/fio'
+  file: >
+    path={{ fio_workspace_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create result dir '../result/fio'
+  file: >
+    path={{ fio_result_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+- name: Create result dir '../workloads/fio'
+  file: >
+    path={{ fio_workload_dir }}
+    state=directory
+    recurse=yes
+    owner={{ user }}
+    group={{ user }}
+    mode="0755"
+
+# Install the package "foo"
+- name: Install fio via apt
+  sudo: true
+  apt: name=fio state=present
+
+# Create workload files
+- name: Create worklaod file for 'seq read libaio'
+  template: >
+    src="{{ wl_r_l_name }}.j2"
+    dest="{{ fio_workload_dir }}/{{ wl_r_l_name }}"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+- name: Create worklaod file for 'seq read mmap'
+  template: >
+    src="{{ wl_r_m_name }}.j2"
+    dest="{{ fio_workload_dir }}/{{ wl_r_m_name }}"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+- name: Create worklaod file for 'seq write libaio'
+  template: >
+    src="{{ wl_w_l_name }}.j2"
+    dest="{{ fio_workload_dir }}/{{ wl_w_l_name }}"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+- name: Create worklaod file for 'seq write mmap'
+  template: >
+    src="{{ wl_w_m_name }}.j2"
+    dest="{{ fio_workload_dir }}/{{ wl_w_m_name }}"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+# Create script to start workload execution
+- name: Create bash script 'start_wl.sh'
+  template: >
+    src=start_wl.j2
+    dest="{{ fio_workload_dir }}/start_wl.sh"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+# Create script to start workload execution
+- name: Create bash script 'start_w_m.sh'
+  template: >
+    src=start_w_m.j2
+    dest="{{ fio_workload_dir }}/start_w_m.sh"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+# Create script to start workload execution
+- name: Create bash script 'start_w_m.sh'
+  template: >
+    src=start_w_l.j2
+    dest="{{ fio_workload_dir }}/start_w_l.sh"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+# Create script to start workload execution
+- name: Create bash script 'start_r_m.sh'
+  template: >
+    src=start_r_m.j2
+    dest="{{ fio_workload_dir }}/start_r_m.sh"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
+
+# Create script to start workload execution
+- name: Create bash script 'start_r_l.sh'
+  template: >
+    src=start_r_l.j2
+    dest="{{ fio_workload_dir }}/start_r_l.sh"
+    owner={{ user }}
+    group={{ user }}
+    mode=0755
