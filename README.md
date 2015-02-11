@@ -12,5 +12,6 @@ ansible all --private-key=/Users/jk/jk_f_2015.pem -i ./inv -m setup
 
 Better:
 http://docs.ansible.com/setup_module.html
-# Display facts from all hosts and store them indexed by I(hostname) at C(/tmp/facts).
+
+Display facts from all hosts and store them indexed by I(hostname) at C(/tmp/facts)
 ansible all -m setup --tree /tmp/facts
